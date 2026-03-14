@@ -1,0 +1,27 @@
+# Grafana 数据源配置
+apiVersion: 1
+
+datasources:
+  # Prometheus 数据源
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+
+  # Loki 数据源
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: true
+    jsonData:
+      maxLines: 1000
+
+  # SRE Agent 数据源（如果有 metrics 端点）
+  - name: SRE-Agent
+    type: prometheus
+    access: proxy
+    url: http://sre-agent:8000
+    editable: true

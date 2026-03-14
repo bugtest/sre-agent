@@ -1,0 +1,44 @@
+# Prometheus 配置文件
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# 告警规则
+rule_files:
+  # - "alerts.yml"
+
+# 抓取配置
+scrape_configs:
+  # Prometheus 自监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # SRE Agent 监控
+  - job_name: 'sre-agent'
+    static_configs:
+      - targets: ['sre-agent:8000']
+    metrics_path: '/metrics'
+
+  # 模拟业务服务（测试用）
+  - job_name: 'payment-service'
+    static_configs:
+      - targets: ['mock-services:8080']
+    metrics_path: '/metrics'
+    labels:
+      service: 'payment-service'
+      namespace: 'production'
+
+  - job_name: 'order-service'
+    static_configs:
+      - targets: ['mock-services:8081']
+    metrics_path: '/metrics'
+    labels:
+      service: 'order-service'
+      namespace: 'production'
+
+# 告警管理器（可选）
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
