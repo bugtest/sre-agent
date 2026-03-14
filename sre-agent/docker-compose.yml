@@ -11,7 +11,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/sre_db
+      - DATABASE_URL=mysql+pymysql://sre_user:sre_password@mysql:3306/sre_db
       - PROMETHEUS_URL=http://prometheus:9090
       - LOKI_URL=http://loki:3100
       - KUBECONFIG=/root/.kube/config
@@ -20,7 +20,7 @@ services:
       - ./src:/app/src:ro
       - ~/.kube/config:/root/.kube/config:ro
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
       prometheus:
         condition: service_started
@@ -30,23 +30,24 @@ services:
       - sre-network
     restart: unless-stopped
 
-  # PostgreSQL 数据库
-  postgres:
-    image: postgres:15-alpine
-    container_name: sre-postgres
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: sre-mysql
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sre_db
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sre_db
+      - MYSQL_USER=sre_user
+      - MYSQL_PASSWORD=sre_password
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
       - ./migrations:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5432:5432"
+      - "3306:3306"
     networks:
       - sre-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "sre_user", "-psre_password"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -108,7 +109,7 @@ networks:
     driver: bridge
 
 volumes:
-  postgres-data:
+  mysql-data:
   prometheus-data:
   loki-data:
   grafana-data:
