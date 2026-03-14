@@ -1,0 +1,26 @@
+# SRE Agent 依赖
+
+# Web 框架
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# 数据库
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# 验证
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# 测试
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+httpx==0.26.0  # FastAPI TestClient 需要
+
+# 日志
+loguru==0.7.2
+
+# 工具
+python-dotenv==1.0.0
