@@ -1,0 +1,26 @@
+# STATE.yaml - SRE Agent 状态
+
+project: sre-agent
+updated: 2026-03-14T18:57:00Z
+status: ready
+
+# 当前告警
+current_alerts: []
+
+# 故障事件
+incidents: []
+
+# 监控目标
+monitoring_targets: []
+
+# 常用服务器列表
+servers: []
+
+# 常用日志路径
+log_paths: {}
+
+# 告警统计
+metrics:
+  alerts_handled_today: 0
+  mttr_minutes: 0  # Mean Time To Resolve
+  uptime_percent: 99.9
